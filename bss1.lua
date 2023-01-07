@@ -4175,7 +4175,7 @@ task.spawn(function()
                                     disableall()
                                     game.Workspace.Map.Ground.HighBlock.CanCollide = false
                                     temptable.MondoPosition = game.Workspace.Monsters["Mondo Chick (Lvl 8)"].Head.Position
-                                    api.tweenNoDelay(0.1, CFrame.new(
+                                    api.tweenNoDelay(0.05, CFrame.new(
                                         temptable.MondoPosition.x,
                                         temptable.MondoPosition.y - 55,
                                         temptable.MondoPosition.z)
@@ -4184,18 +4184,18 @@ task.spawn(function()
                                     temptable.float = true
                                 end
                                 temptable.MondoCollectTokens = true
-                                task.wait(0.5)
+                                task.wait(0.25)
                                 game.Workspace.Map.Ground.HighBlock.CanCollide = true
                                 temptable.float = false
                                 api.teleport(game.Workspace.FlowerZones["Mountain Top Field"].CFrame)
-                                task.wait(1)
+                                task.wait(0.85)
                                 api.teleport(game.Workspace.FlowerZones["Mountain Top Field"].CFrame)
                                 for i = 0, 50 do
                                     gettoken(CFrame.new(73.2, 176.35, -167).Position)
                                 end
                                 temptable.MondoCollectTokens = false
                                 enableall()
-                                api.tween(2, fieldpos)
+                                api.tween(1.65, fieldpos)
                                 temptable.started.mondo = false
                             end
                         end
@@ -4772,7 +4772,7 @@ function farmcombattokens(v, pos, type)
             if (v.Position - pos.Position).Magnitude < 25 then
                 repeat
                     task.wait()
-                    api.tweenNoDelay(0.25, v.CFrame)
+                    api.tweenNoDelay(0.125, v.CFrame)
                 until not v.Parent or v.CFrame.YVector.Y ~= 1 or not v
                 api.teleport(pos)
             end
