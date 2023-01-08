@@ -161,10 +161,12 @@ getgenv().temptable = {
         return Closest
     end,
     coconuts = {},
+    glitcheds = {},
     crosshairs = {},
     bubbles = {},
     crosshair = false,
     coconut = false,
+    glitched = false,
     act = 0,
     act2 = 0,
     ["touchedfunction"] = function(v)
@@ -968,13 +970,13 @@ function farm(trying, important)
     if important and bongkoc.toggles.bloatfarm and temptable.foundpopstar then temptable.float = false api.teleport(CFrame.new(trying.CFrame.Position) * CFrame.Angles(0, math.rad(180), 0)) end
     if bongkoc.toggles.loopfarmspeed then game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = bongkoc.vars.farmspeed end
         api.humanoid():MoveTo(trying.Position)
-    repeat task.wait() until (trying.Position-api.humanoidrootpart().Position).magnitude <= 4 or not IsToken(trying) or not temptable.running
+    repeat task.wait() until (trying.Position - api.humanoidrootpart().Position).magnitude <= 4 or not IsToken(trying) or not temptable.running
 end
 
 function farmold(trying, important)
     if bongkoc.toggles.loopfarmspeed then game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = bongkoc.vars.farmspeed end
         api.humanoid():MoveTo(trying.Position)
-    repeat task.wait() until (trying.Position-api.humanoidrootpart().Position).magnitude <= 4 or not IsToken(trying) or not temptable.running
+    repeat task.wait() until (trying.Position - api.humanoidrootpart().Position).magnitude <= 4 or not IsToken(trying) or not temptable.running
 end
 
 function disableall()
@@ -1517,14 +1519,14 @@ end
 
 function converthoney()
     task.wait(0)
-    if temptable.converting and not temptable.doingbubbles and not temptable.planting then
+    if temptable.converting and not temptable.planting then
         if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
-            api.tween(1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
-            task.wait(0.95)
+            api.tween(3, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+            task.wait(0.9)
             if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
                 game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
             end
-            task.wait(0.15)
+            task.wait(0.1)
         end
     end
 end
@@ -1542,27 +1544,26 @@ function closestleaf()
     end
 end
 
-
 function getfireflies()
     for i,v in pairs(workspace.NPCBees:GetChildren()) do
-        if v.Name == "Firefly" then
-            temptable.float = true
-            wait(0.05)
-            api.humanoidrootpart().CFrame = CFrame.new(v.Position.x, v.Position.y, v.Position.z)
+        if v.Name == "Firefly" and v.Velocity.Magnitude < 1.5 then
+            api.humanoidrootpart().CFrame = CFrame.new(v.Position + Vector3.new(0, 2, 0))
+            wait(0.15)
         end
     end
-    wait(3)
-    temptable.float = false
 end
 
 function getsparkles()
-    for i,v in pairs(workspace.Flowers:GetChildren()) do
-        if (v.Name == "Sparkles") and (v.Parent:IsA("Part")) and (v.Parent) then
-            api.humanoidrootpart().CFrame = CFrame.new(v.Parent.Position)
-            task.wait(1.2)
-            farm(v)
-        else
-            continue
+    for _, Object in pairs(workspace.Flowers:GetDescendants()) do
+        if Object.Name == "Sparkles" and Object.Parent then
+            api.humanoidrootpart().CFrame = CFrame.new(Object.Parent.Position + Vector3.new(0, 2, 0))                
+            for _ = 1, 5 do
+                for _, Object in pairs(api.humanoidrootpart():GetDescendants()) do
+                    if Object.Name == "ClickEvent" then
+                        Object:FireServer()
+                    end
+                end
+            end
         end
     end
 end
@@ -1643,6 +1644,40 @@ function getcloud()
     end
 end
 
+--[[function getglitchtoken()
+    pcall(function()
+        for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
+            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") then
+                local hashed = math.random(1, 42345252)
+                v.Name = tostring(hashed)
+                repeat task.wait(0.1)
+                api.walkTo(v.Position)
+                --api.humanoidrootpart().Velocity = Vector3.new(0, 0, 0)
+                --api.humanoidrootpart().CFrame = CFrame.new(v.CFrame.X, v.CFrame.Y - 14, v.CFrame.Z)
+                until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
+            end
+        end
+    end)
+end]]
+
+function getglitchtoken(v)
+    if temptable.glitched then repeat task.wait() until not temptable.glitched end
+    temptable.glitched = true
+    pcall(function()
+        for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
+            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.planting then
+                local hashed = math.random(1, 42345252)
+                v.Name = tostring(hashed)
+                repeat task.wait(0.1)
+                api.walkTo(v.Position)
+                until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
+            end
+        end
+    temptable.glitched = false
+    table.remove(temptable.glitcheds, table.find(temptable.glitcheds, v))
+    end)
+end
+
 function getcoco(v)
     if temptable.coconut then repeat task.wait() until not temptable.coconut end
     temptable.coconut = true
@@ -1686,45 +1721,6 @@ function getflame()
         end
     end
 end
-
---[[function getglitchtoken()
-    pcall(function()
-        for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
-            if v.Name == "C" then
-                api.humanoidrootpart().Velocity = Vector3.new(0, 0, 0)
-                api.humanoidrootpart().CFrame = CFrame.new(v.CFrame.p)
-                task.wait(1.25)
-            end
-        end
-    end)
-end]]
-
-function getglitchtoken()
-    pcall(function()
-        for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
-            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") then
-                local hashed = math.random(1, 42345252)
-                v.Name = tostring(hashed)
-                repeat task.wait(0.15)
-                api.humanoidrootpart().Velocity = Vector3.new(0, 0, 0)
-                api.humanoidrootpart().CFrame = CFrame.new(v.CFrame.X, v.CFrame.Y - 14, v.CFrame.Z)
-                until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
-            end
-        end
-    end)
-end
-
---[[function getglitchtoken()
-    for i,v in pairs(game:GetService("Workspace").Camera.DupedTokens:GetChildren()) do
-        if tonumber((v.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude) < temptable.magnitude/1.4 then
-            repeat
-                api.humanoid():MoveTo(v.Position)
-                task.wait()
-            until not v or not v.Parent
-            break
-        end
-    end
-end]]
 
 function avoidmob()
     for i, v in next, game.Workspace.Monsters:GetChildren() do
@@ -2588,7 +2584,7 @@ end
 writefile("PrevServers2.txt",s)
 --end temp patch
 else
-    warn("Error loading b0ngkoc Premium")
+    warn("Error loading B0ngkoc Premium")
 end
 loadingBackend:UpdateText("Loaded Backend")
 local loadingUI = loadingInfo:CreateLabel("Loading UI..")
@@ -3717,7 +3713,7 @@ end)
 
 local honeytoggleouyfyt = false
 task.spawn(function()
-    while task.wait(1) do
+    while task.wait(0.5) do
         if bongkoc.toggles.honeymaskconv then
             if temptable.converting and temptable.collecting.collecthoneytoken then
                 if not honeytoggleouyfyt then
@@ -3768,7 +3764,7 @@ task.spawn(function()
             if bongkoc.toggles.farmfuzzy then
                 getfuzzy()
             end
-            if bongkoc.toggles.farmglitchedtokens and not temptable.planting then
+            if bongkoc.toggles.farmglitchedtokens and not temptable.planting and not temptable.started.monsters and not temptable.converting then
                 getglitchtoken()
             end
             if bongkoc.toggles.farmflame then
@@ -3778,13 +3774,23 @@ task.spawn(function()
     end
 end)
 
+game.Workspace.Camera.DupedTokens.ChildAdded:Connect(function(v)
+    if not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant then
+        if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.started.vicious and not temptable.started.monsters and bongkoc.toggles.autofarm and not temptable.started.ant and bongkoc.toggles.farmglitchedtokens and (v.Position - api.humanoidrootpart().Position).magnitude < temptable.magnitude and not temptable.converting then
+            table.insert(temptable.glitcheds, v)
+            getglitchtoken(v)
+            gettoken()
+        end
+    end
+end)
+
 game.Workspace.Particles.ChildAdded:Connect(function(v)
-    if not temptable.started.vicious and not temptable.started.ant then
-        if v.Name == "WarningDisk" and not temptable.started.vicious and bongkoc.toggles.autofarm and not temptable.started.ant and bongkoc.toggles.farmcoco and (v.Position-api.humanoidrootpart().Position).magnitude < temptable.magnitude and not temptable.converting then
+    if not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant then
+        if v.Name == "WarningDisk" and not temptable.started.vicious and bongkoc.toggles.autofarm and not temptable.started.ant and bongkoc.toggles.farmcoco and (v.Position - api.humanoidrootpart().Position).magnitude < temptable.magnitude and not temptable.converting then
             table.insert(temptable.coconuts, v)
             getcoco(v)
             gettoken()
-        elseif v.Name == "Crosshair" and v ~= nil and v.BrickColor ~= BrickColor.new("Forest green") and not temptable.started.ant and v.BrickColor ~= BrickColor.new("Flint") and (v.Position-api.humanoidrootpart().Position).magnitude < temptable.magnitude and bongkoc.toggles.autofarm and bongkoc.toggles.collectcrosshairs and not temptable.converting then
+        elseif v.Name == "Crosshair" and v ~= nil and v.BrickColor ~= BrickColor.new("Forest green") and not temptable.started.ant and v.BrickColor ~= BrickColor.new("Flint") and (v.Position - api.humanoidrootpart().Position).magnitude < temptable.magnitude and bongkoc.toggles.autofarm and bongkoc.toggles.collectcrosshairs and not temptable.converting then
             if #temptable.crosshairs <= 3 then
                 table.insert(temptable.crosshairs, v)
                 getcrosshairs(v)
@@ -4175,12 +4181,12 @@ task.spawn(function()
                                     disableall()
                                     game.Workspace.Map.Ground.HighBlock.CanCollide = false
                                     temptable.MondoPosition = game.Workspace.Monsters["Mondo Chick (Lvl 8)"].Head.Position
-                                    api.tweenNoDelay(0.05, CFrame.new(
+                                    api.tweenNoDelay(0.015, CFrame.new(
                                         temptable.MondoPosition.x,
                                         temptable.MondoPosition.y - 55,
                                         temptable.MondoPosition.z)
                                     )
-                                    task.wait(1)
+                                    task.wait(0.85)
                                     temptable.float = true
                                 end
                                 temptable.MondoCollectTokens = true
@@ -4200,14 +4206,14 @@ task.spawn(function()
                             end
                         end
                         if lastfieldpos ~= fieldpos then
-                            task.wait(0.5)
+                            task.wait(0.45)
                             gettoken()
                         end
                         --if bongkoc.toggles.farmboostedfield then farmboostedfield() end
                         if (fieldposition - api.humanoidrootpart().Position).magnitude > temptable.magnitude and findField(api.humanoidrootpart().CFrame.p) ~= findField(fieldposition) and not temptable.planting and not temptable.doingcrosshairs and not temptable.doingbubbles then
                             api.teleport(fieldpos)
                             task.spawn(function()
-                                task.wait(0.5)
+                                task.wait(0.45)
                                 if bongkoc.toggles.autosprinkler then
                                     makesprinklers(fieldposition, onlyonesprinkler)
                                 end
@@ -4318,20 +4324,6 @@ task.spawn(function()
         end
     end
 end)
-
---[[if bongkoc.toggles.farmfireflies and not temptable.sprouts.detected and not temptable.sprouts.coords and not temptable.converting and not temptable.planting then
-    for k,v in next, game.workspace.Collectibles:GetChildren() do
-        if v.CFrame.YVector.Y == 1 then
-            if v.Transparency == 0 then
-                decal = v:FindFirstChildOfClass("Decal")
-                if decal.Texture == "2306224708" or decal.Texture == "rbxassetid://2306224708" then
-                    api.humanoidrootpart().CFrame = v.CFrame
-                    break
-                end
-            end
-        end
-    end
-end]]
 
 --stickbug
 --[[function checksbcooldown()
@@ -4548,7 +4540,7 @@ end)
 
 task.spawn(function()
     while task.wait(1) do
-        if bongkoc.toggles.killvicious and temptable.detected.vicious and not bongkoc.toggles.traincrab and not temptable.doingbubbles and not temptable.converting and not temptable.planting and not bongkoc.toggles.trainsnail and not temptable.started.commando and not temptable.started.mondo and not temptable.started.monsters and not game.Workspace.Toys["Ant Challenge"].Busy.Value then
+        if bongkoc.toggles.killvicious and temptable.detected.vicious and not bongkoc.toggles.traincrab and not temptable.converting and not temptable.planting and not bongkoc.toggles.trainsnail and not temptable.started.commando and not temptable.started.mondo and not temptable.started.monsters and not game.Workspace.Toys["Ant Challenge"].Busy.Value then
             temptable.started.vicious = true
             disableall()
             local vichumanoid = api.humanoidrootpart()
@@ -4589,7 +4581,7 @@ end)
 
 task.spawn(function()
     while task.wait() do
-        if bongkoc.toggles.killwindy and temptable.detected.windy and not bongkoc.toggles.traincrab and not temptable.converting and not temptable.started.commando and not temptable.doingbubbles and not temptable.planting and not temptable.started.vicious and not temptable.started.mondo and not bongkoc.toggles.trainsnail and not temptable.started.monsters and not game.Workspace.Toys["Ant Challenge"].Busy.Value then
+        if bongkoc.toggles.killwindy and temptable.detected.windy and not bongkoc.toggles.traincrab and not temptable.converting and not temptable.started.commando and not temptable.planting and not temptable.started.vicious and not temptable.started.mondo and not bongkoc.toggles.trainsnail and not temptable.started.monsters and not game.Workspace.Toys["Ant Challenge"].Busy.Value then
             temptable.started.windy = true
             local windytokendb = false
             local windytokentp = false
@@ -4670,12 +4662,14 @@ end)
 game.Workspace.Collectibles.ChildAdded:Connect(function(token)
     if bongkoc.toggles.trainsnail then farmcombattokens(token, CFrame.new(game.Workspace.FlowerZones["Stump Field"].Position.X, game.Workspace.FlowerZones["Stump Field"].Position.Y-10, game.Workspace.FlowerZones["Stump Field"].Position.Z), "snail") end   
     if bongkoc.toggles.traincrab then farmcombattokens(token, CFrame.new(-256, 110, 475), "crab") end
-    if bongkoc.toggles.killmondo and not temptable.MondoCollectTokens and temptable.MondoPosition then farmcombattokens(token, CFrame.new(temptable.MondoPosition.x, temptable.MondoPosition.y - 55, temptable.MondoPosition.z), "mondo") end
+    --if bongkoc.toggles.farmfireflies then farmcombattokens(token, CFrame.new(0, 2, 0), "Firefly") end
+    --if bongkoc.toggles.farmsparkles then farmcombattokens(token, CFrame.new(0, 2, 0), "Sparkles") end
+    if bongkoc.toggles.killmondo and temptable.MondoPosition then farmcombattokens(token, CFrame.new(temptable.MondoPosition.x, temptable.MondoPosition.y - 55, temptable.MondoPosition.z), "mondo") end
     if bongkoc.toggles.traincommando then farmcombattokens(token, CFrame.new(520.758, 58.8, 161.651), "commando") end
 end)
 
 task.spawn(function()
-    while task.wait(0.05) do
+    while task.wait(0.03) do
         if bongkoc.toggles.autodig then
             if player.Character then
                 local tool = player.Character:FindFirstChildOfClass("Tool")
@@ -4729,7 +4723,7 @@ task.spawn(function()
             end
         end
         if bongkoc.toggles.farmleaves and not temptable.planting and not temptable.converting then
-            task.wait(3.75)
+            task.wait(3.85)
             for i, v in next, game.Workspace.Flowers:GetDescendants() do
                 if v.Name == "LeafBurst" and v.Parent:IsA("Part") and v.Parent then
                     api.humanoidrootpart().CFrame = CFrame.new(v.Parent.Position)
@@ -4769,10 +4763,10 @@ function farmcombattokens(v, pos, type)
     elseif type == "mondo" then
         if temptable.MondoCollectTokens then return end
         if v.CFrame.YVector.Y == 1 and v.Transparency == 0 and v ~= nil and v.Parent ~= nil then
-            if (v.Position - pos.Position).Magnitude < 25 then
+            if (v.Position - pos.Position).Magnitude < 50 then
                 repeat
                     task.wait()
-                    api.tweenNoDelay(0.125, v.CFrame)
+                    api.tweenNoDelay(0.1, v.CFrame)
                 until not v.Parent or v.CFrame.YVector.Y ~= 1 or not v
                 api.teleport(pos)
             end
@@ -4787,9 +4781,27 @@ function farmcombattokens(v, pos, type)
                 api.teleport(pos)
             end
         end
+    --[[elseif type == "Firefly" then
+        if v.CFrame.YVector.Y == 1 and v.Transparency == 0 and v ~= nil and v.Parent ~= nil then
+            if (v.Position - pos.Position).Magnitude < 25 then
+                repeat
+                    task.wait()
+                    api.walkTo(v.Position)
+                until not v.Parent or v.CFrame.YVector.Y ~= 1 or not v
+            end
+        end
+    elseif type == "Sparkles" then
+        if v.CFrame.YVector.Y == 1 and v.Transparency == 0 and v ~= nil and v.Parent ~= nil then
+            if (v.Position - pos.Position).Magnitude < 20 then
+                repeat
+                    task.wait()
+                    api.walkTo(v.Position)
+                until not v.Parent or v.CFrame.YVector.Y ~= 1 or not v
+            end
+        end]]
     elseif type =="commando" then
         if v.CFrame.YVector.Y == 1 and v.Transparency == 0 and v ~= nil and v.Parent ~= nil then
-            if (v.Position - pos.Position).Magnitude < 50 then
+            if (v.Position - pos.Position).Magnitude < 55 then
                 repeat
                     task.wait()
                     api.walkTo(v.Position)
@@ -4840,8 +4852,8 @@ game.Workspace.NPCBees.ChildRemoved:Connect(function(v)
 end)
 
 task.spawn(function()
-    while task.wait(0.1) do
-        if not temptable.planting and not temptable.started.vicious and not temptable.started.windy and not temptable.started.mondo and not temptable.started.ant and not temptable.started.monsters and not temptable.doingbubbles and not bongkoc.toggles.traincrab then
+    while task.wait(0.05) do
+        if bongkoc.toggles.autofarm and not temptable.planting and not temptable.started.mondo and not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant and not temptable.started.monsters and not bongkoc.toggles.traincrab then
             if bongkoc.toggles.autosamovar then
                 game:GetService("ReplicatedStorage").Events.ToyEvent:FireServer("Samovar")
                 platformm = game.Workspace.Toys.Samovar.Platform
@@ -4915,7 +4927,7 @@ task.spawn(function()
                 local pollencount = game.Players.LocalPlayer.CoreStats.Pollen.Value
                 pollenpercentage = pollencount/maxpollen*100
                 if tonumber(temptable.pollenpercentage) >= tonumber(bongkoc.vars.convertat) and not bongkoc.toggles.disableconversion then
-                    if bongkoc.toggles.autohoneywreath and not temptable.doingbubbles then
+                    if bongkoc.toggles.autohoneywreath then
                         temptable.collecting.collecthoneytoken = true
                         wait(10)
                         temptable.collecting.collecthoneytoken = false
@@ -5785,10 +5797,9 @@ if _G.autoload then
     end
 end
 
---game:GetService("Workspace").Territories.InsideCave:Destroy()
---game:GetService("Workspace").MonsterSpawners.CaveMonster2:Destroy()
---game:GetService("Workspace").MonsterSpawners.CaveMonster1:Destroy()
---game:GetService("Workspace").ForwardPortal:Destroy()
+game:GetService("Workspace").Gates["5 Bee Gate"].Frame:Destroy()
+game:GetService("Workspace").Gates["15 Bee Gate"].Frame:Destroy()
+game:GetService("Workspace").Gates["25 Bee Gate"].Frame:Destroy()
 
 for _, part in next, workspace:FindFirstChild("FieldDecos"):GetDescendants() do
     if part:IsA("BasePart") then
@@ -5805,13 +5816,14 @@ for _, part in next, workspace:FindFirstChild("Decorations"):GetDescendants() do
         task.wait()
     end
 end
-for _, part in next, workspace:FindFirstChild("Gates"):GetDescendants() do
-    if part:IsA("BasePart") then
+--[[for _, part in next, workspace:FindFirstChild("Gates"):GetDescendants() do
+    if part:IsA("BasePart") and
+        (part.Parent.Name == "5 Bee Gate.Frame" or part.Parent.Name == "10 Bee Gate" or part.Parent.Name == "15 Bee Gate" or part.Parent.Name == "20 Bee Gate" or part.Parent.Name == "25 Bee Gate" or part.Parent.Name == "30 Bee Gate" or part.Parent.Name == "35 Bee Gate") then
         part.CanCollide = false
         part.Transparency = part.Transparency < 0.65 and 0.65 or part.Transparency
         task.wait()
     end
-end
+end]]
 for _, part in next, workspace.Map.Fences:GetDescendants() do
     if part:IsA("BasePart") then
         part.CanCollide = false
