@@ -196,7 +196,6 @@ getgenv().temptable = {
     starttime = tick(),
     planting = false,
     crosshaircounter = 0,
-    MondoCollectTokens = false,
     doingbubbles = false,
     doingcrosshairs = false,
     pollenpercentage = 0,
@@ -4122,7 +4121,7 @@ task.spawn(function()
                     if bongkoc.toggles.autoquest then
                         makequests()
                     end
-                    if bongkoc.toggles.autokillmobs and not temptable.started.vicious and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious then
+                    if bongkoc.toggles.autokillmobs and not temptable.started.vicious and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious and not temptable.planting then
                         if tick() - temptable.lastmobkill >= bongkoc.vars.monstertimer * 60 then
                             temptable.lastmobkill = tick()
                             temptable.started.monsters = true
@@ -4180,33 +4179,30 @@ task.spawn(function()
                                 while game.Workspace.Monsters:FindFirstChild("Mondo Chick (Lvl 8)") do
                                     disableall()
                                     game.Workspace.Map.Ground.HighBlock.CanCollide = false
-                                    temptable.MondoPosition = game.Workspace.Monsters["Mondo Chick (Lvl 8)"].Head.Position
-                                    api.tweenNoDelay(0.015, CFrame.new(
-                                        temptable.MondoPosition.x,
-                                        temptable.MondoPosition.y - 55,
-                                        temptable.MondoPosition.z)
+                                    mondopition = game.Workspace.Monsters["Mondo Chick (Lvl 8)"].Head.Position
+                                    api.tween(0.015, CFrame.new(
+                                        mondopition.x,
+                                        mondopition.y - 59.90,
+                                        mondopition.z)
                                     )
                                     task.wait(0.85)
                                     temptable.float = true
                                 end
-                                temptable.MondoCollectTokens = true
                                 task.wait(0.25)
                                 game.Workspace.Map.Ground.HighBlock.CanCollide = true
                                 temptable.float = false
-                                api.teleport(game.Workspace.FlowerZones["Mountain Top Field"].CFrame)
-                                task.wait(0.85)
-                                api.teleport(game.Workspace.FlowerZones["Mountain Top Field"].CFrame)
+                                api.tween(0.355, CFrame.new(73.2, 176.35, -167))
+                                task.wait(0.8)
                                 for i = 0, 50 do
                                     gettoken(CFrame.new(73.2, 176.35, -167).Position)
                                 end
-                                temptable.MondoCollectTokens = false
                                 enableall()
                                 api.tween(1.65, fieldpos)
                                 temptable.started.mondo = false
                             end
                         end
                         if lastfieldpos ~= fieldpos then
-                            task.wait(0.45)
+                            task.wait(0.4)
                             gettoken()
                         end
                         --if bongkoc.toggles.farmboostedfield then farmboostedfield() end
@@ -4664,7 +4660,6 @@ game.Workspace.Collectibles.ChildAdded:Connect(function(token)
     if bongkoc.toggles.traincrab then farmcombattokens(token, CFrame.new(-256, 110, 475), "crab") end
     --if bongkoc.toggles.farmfireflies then farmcombattokens(token, CFrame.new(0, 2, 0), "Firefly") end
     --if bongkoc.toggles.farmsparkles then farmcombattokens(token, CFrame.new(0, 2, 0), "Sparkles") end
-    if bongkoc.toggles.killmondo and temptable.MondoPosition then farmcombattokens(token, CFrame.new(temptable.MondoPosition.x, temptable.MondoPosition.y - 55, temptable.MondoPosition.z), "mondo") end
     if bongkoc.toggles.traincommando then farmcombattokens(token, CFrame.new(520.758, 58.8, 161.651), "commando") end
 end)
 
@@ -4756,17 +4751,6 @@ function farmcombattokens(v, pos, type)
                 repeat
                     task.wait()
                     api.walkTo(v.Position)
-                until not v.Parent or v.CFrame.YVector.Y ~= 1 or not v
-                api.teleport(pos)
-            end
-        end
-    elseif type == "mondo" then
-        if temptable.MondoCollectTokens then return end
-        if v.CFrame.YVector.Y == 1 and v.Transparency == 0 and v ~= nil and v.Parent ~= nil then
-            if (v.Position - pos.Position).Magnitude < 50 then
-                repeat
-                    task.wait()
-                    api.tweenNoDelay(0.1, v.CFrame)
                 until not v.Parent or v.CFrame.YVector.Y ~= 1 or not v
                 api.teleport(pos)
             end
