@@ -191,7 +191,7 @@ getgenv().temptable = {
         coordd = CFrame.new(part.Position.X, part.Position.Y + st, part.Position.Z)
         return coordd
     end,
-    ['feed'] = function(x, y, type, amount)
+    ["feed"] = function(x, y, type, amount)
         if not amount then
             amount = 1
         end
@@ -273,14 +273,14 @@ for _, v in next, getupvalues(
                 require(game:GetService("ReplicatedStorage").Collectors).Exists) do
     for e, r in next, v do table.insert(collectorstable, e) end
 end
---[[local beestable = {}
+local beestable = {}
 for _, v in next, game:GetService("ReplicatedStorage").BeeModels:GetChildren() do
     table.insert(beestable, v.Name)
-end]]
-local mutatable = {}
+end
+--[[local mutatable = {}
 for _, v in next, game:GetService("ReplicatedStorage").BeeStats.BeeMutations:GetChildren() do
     table.insert(mutatable, v.Name)
-end
+end]]
 local fieldstable = {}
 for _, v in next, game.Workspace.FlowerZones:GetChildren() do
     table.insert(fieldstable, v.Name)
@@ -371,6 +371,24 @@ for i, v in pairs(AccessoryTypes) do
     end
 end
 
+local DropdownMutationTable = {
+    "Convert Amount",
+    "Gather Amount",
+    "Ability Rate",
+    "Attack",
+    "Energy"
+}
+
+local DropdownTreatsTable = {
+    "Treat",
+    "SunflowerSeed",
+    "Blueberry",
+    "Strawberry",
+    "Bitterberry",
+    "Pineapple",
+    "GingerbreadBear"
+}
+
 local DropdownPlanterTable = {
     "Paper Planter",
     "Ticket Planter",
@@ -402,8 +420,8 @@ table.sort(spawnerstable)
 table.sort(masktable)
 table.sort(temptable.allplanters)
 table.sort(collectorstable)
---table.sort(beestable)
-table.sort(mutatable)
+table.sort(beestable)
+--table.sort(mutatable)
 table.sort(treatsTable)
 table.sort(donatableItemsTable)
 table.sort(buffTable)
@@ -628,7 +646,11 @@ getgenv().bongkoc = {
         ["autouseJelly Beans"] = false,
         usegumdropsforquest = false,
         autox4 = false,
-        newtokencollection = false
+        newtokencollection = false,
+        usbtoggle = false,
+        ugb = false,
+        af = false,
+        umb = false
     },
     vars = {
         field = "Stump Field",
@@ -652,6 +674,9 @@ getgenv().bongkoc = {
         resettimer = 3,
         questcolorprefer = "Any NPC",
         playertofollow = "",
+        usb = "",
+        --foodtype = "Treat",
+        mutation = "Ability Rate",
         convertballoonpercent = 50,
         planterharvestamount = 75,
         webhookurl = "",
@@ -708,13 +733,6 @@ getgenv().bongkoc = {
             y = 1,
             amount = 1
         },
-        --usb = "",
-        --usbtoggle = false,
-        ugb = false,
-        foodtype = "Treat",
-        af = false,
-        mutation = "Ability Rate",
-        umb = false
     },
     dispensesettings = {
         blub = false,
@@ -1468,12 +1486,12 @@ function converthoney()
     task.wait(0)
     if temptable.converting and not temptable.planting then
         if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
-            api.tween(3, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+            api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
             task.wait(0.9)
             if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
                 game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
             end
-            task.wait(0.1)
+            task.wait(0.15)
         end
     end
 end
@@ -1615,11 +1633,12 @@ function getglitchtoken(v)
             if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.planting then
                 local hashed = math.random(1, 42345252)
                 v.Name = tostring(hashed)
-                repeat task.wait(0.15)
+                repeat task.wait(0.075)
                 api.walkTo(v.Position)
                 until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
             end
         end
+    task.wait(0.005)
     temptable.glitched = false
     table.remove(temptable.glitcheds, table.find(temptable.glitcheds, v))
     end)
@@ -1630,7 +1649,7 @@ function getcoco(v)
     temptable.coconut = true
     api.tween(0.1, v.CFrame)
     repeat task.wait() api.walkTo(v.Position) until not v.Parent
-    task.wait(0.15)
+    task.wait(0.06)
     --[[repeat
         task.wait()
         if setfflag then
@@ -1685,10 +1704,10 @@ function getcrosshairs(v)
     temptable.crosshair = true
     --api.walkTo(v.Position)
     repeat
-        task.wait()
+        task.wait(0.085)
         api.walkTo(v.Position)
     until not v.Parent or v.BrickColor == BrickColor.new("Forest green") or v.BrickColor == BrickColor.new("Royal purple")
-    task.wait(0.1)
+    task.wait(0.07)
     temptable.crosshair = false
     table.remove(temptable.crosshairs, table.find(temptable.crosshairs, v))
     else
@@ -1744,7 +1763,7 @@ function docrosshairs()
                 if (v.Position - api.humanoidrootpart().Position).magnitude > 200 then continue end
                 if getBuffTime("8172818074") > 0.5 and getBuffStack("8172818074") > 9 and getBuffTime("5101329167") == 0 then
                     if v.BrickColor == BrickColor.new("Alder") then
-                        task.wait(0.1)
+                        task.wait(0.065)
                         local save_height = v.Position.y
                         repeat
                             task.wait()
@@ -1756,7 +1775,7 @@ function docrosshairs()
                         repeat
                             api.humanoid():MoveTo(v.Position)
                             task.wait()
-                        until (v.Position - api.humanoidrootpart().Position).magnitude <= 4 or not v or not v.Parent or v.BrickColor == BrickColor.new("Forest green") or v.BrickColor == BrickColor.new("Royal purple")
+                        until (v.Position - api.humanoidrootpart().Position).magnitude <= 5 or not v or not v.Parent or v.BrickColor == BrickColor.new("Forest green") or v.BrickColor == BrickColor.new("Royal purple")
                     end
                 end
             else
@@ -2845,7 +2864,6 @@ mobkill:CreateToggle("Train Commando", nil, function(State)
         api.humanoidrootpart().CFrame = CFrame.new(520.758, 58.8, 161.651)
     end
 commandopad.CanCollide = State bongkoc.toggles.traincommando = State end)
---mobkill:CreateToggle("Train Snail", nil, function(State)
 mobkill:CreateToggle("Train Snail",nil, function(State)
     bongkoc.toggles.trainsnail = State
     local fd = game.Workspace.FlowerZones["Stump Field"] 
@@ -2959,7 +2977,7 @@ for i, v in pairs(buffTable) do
     end)
 end
 
-local ghive = itemstab:CreateSection("Hive Position & Food Type")
+local ghive = itemstab:CreateSection("Hive")
 
 ghive:CreateTextBox("X", "default = 1", true, function(Value)
     if tonumber(Value) then
@@ -2973,48 +2991,47 @@ ghive:CreateTextBox("Y", "default = 1", true, function(Value)
 end)
 ghive:CreateTextBox("Amount", "default = 1", true, function(Value)
     if tonumber(Value) then
-        bongkoc.beessettings.general.amount = tonumber(Value) or 1 
+        bongkoc.beessettings.general.amount = tonumber(Value)-- or 1 
     end
 end)
-ghive:CreateDropdown("Food Type", treatsTable, function(option)
+guiElements["vars"]["selectedTreat"] = ghive:CreateDropdown("Select Treat", treatsTable, function(option)
     bongkoc.vars.selectedTreat = option
 end)
 
---[[local arjhive = itemstab:CreateSection("Auto Royal Jelly")
-
-arjhive:CreateDropdown("Bee", beestable, function(Option)
-    if tonumber(Option) then
-        bongkoc.beessettings.usb = tonumber(Option) 
+guiElements["vars"]["usb"] = ghive:CreateDropdown("Bee", beestable, function(option)
+    bongkoc.vars.usb = option
+end)
+guiElements["toggles"]["usbtoggle"] = ghive:CreateToggle("Until Selected Bee", nil, function(State) bongkoc.toggles.usbtoggle = State
+    if not State then
+        game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = ""
     end
 end)
-arjhive:CreateToggle("Until Selected Bee", nil, function(State) bongkoc.beessettings.usbtoggle = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = "" end end)]]
-
-local ugbhive = itemstab:CreateSection("Autofeed")
-
-ugbhive:CreateToggle("Food Until Gifted", nil, function(State) bongkoc.beessettings.ugb = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = "" end end)
-ugbhive:CreateToggle("Auto Feed", nil, function(State) bongkoc.beessettings.af = State end)
-
-local feedhive = itemstab:CreateSection("Manual Feeding")
-
-feedhive:CreateButton("Feed Selected Bee", function()
-    temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype, bongkoc.beessettings.general.amount)
+guiElements["toggles"]["ugb"] = ghive:CreateToggle("Food Until Gifted", nil, function(State) bongkoc.toggles.ugb = State
+    if not State then
+        game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = ""
+    end
 end)
-feedhive:CreateButton("Feed All Bees", function()
+guiElements["toggles"]["af"] = ghive:CreateToggle("Auto Feed", nil, function(State) bongkoc.toggles.af = State end)
+
+ghive:CreateButton("Feed Selected Bee", function()
+    temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.vars.selectedTreat, bongkoc.beessettings.general.amount)
+end)
+ghive:CreateButton("Feed All Bees", function()
     for xbee = 1, 5, 1 do
         for ybee = 1, 10, 1 do
-            temptable.feed(xbee, ybee, bongkoc.beessettings.foodtype, bongkoc.beessettings.general.amount)
+            temptable.feed(xbee, ybee, bongkoc.vars.selectedTreat, bongkoc.beessettings.general.amount)
         end
     end
 end)
 
-local umhive = itemstab:CreateSection("Mutation Rolling")
-
-umhive:CreateDropdown("Mutation", mutatable, function(Value)
-    if tonumber(Value) then
-        bongkoc.beessettings.mutation = tonumber(Value)
+guiElements["vars"]["mutation"] = ghive:CreateDropdown("Mutation", DropdownMutationTable, function(option)
+    bongkoc.vars.mutation = option
+end)
+guiElements["toggles"]["umb"] = ghive:CreateToggle("Roll Until Mutation", nil, function(State) bongkoc.toggles.umb = State
+    if not State then
+        game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = ""
     end
 end)
-umhive:CreateToggle("Roll Until Mutation", nil, function(State) bongkoc.beessettings.umb = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = "" end end)
 
 local miscc = misctab:CreateSection("Misc")
 miscc:CreateButton("Ant Challenge Semi-Godmode", function()
@@ -3694,8 +3711,6 @@ task.spawn(function() while task.wait() do
 	pcall(function()
 		game.Players.LocalPlayer.CameraMinZoomDistance, game.Players.LocalPlayer.CameraMaxZoomDistance = 0x0, 0x400 end)
 end end)
-
--- script
 
 local demontoggleouyfyt = false
 task.spawn(function()
@@ -5787,33 +5802,33 @@ if _G.autoload then
 end
 
 task.spawn(function()
-    while task.wait(0.1) do
-        --[[if bongkoc.beessettings.usbtoggle then
-            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match(bongkoc.beessettings.usb) then
+    while task.wait(0.0035) do
+        if bongkoc.toggles.usbtoggle then
+            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match(bongkoc.vars.usb) then
                 temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "RoyalJelly")
             end
-        end]]
-        if bongkoc.beessettings.ugb then
+        end
+        if bongkoc.toggles.ugb then
             if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match("Gifted") then
-                temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype)
+                temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.vars.selectedTreat)
             end
         end
-        if bongkoc.beessettings.af then
-            temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype, bongkoc.beessettings.general.amount)
+        if bongkoc.toggles.af then
+            temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.vars.selectedTreat, bongkoc.beessettings.general.amount)
         end
-        if bongkoc.beessettings.umb then
-            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text:match(bongkoc.beessettings.mutation) then
+        if bongkoc.toggles.umb then
+            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text:match(bongkoc.vars.mutation) then
                 temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "Bitterberry", bongkoc.beessettings.general.amount)
             end
         end
     end
 end)
 
+game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = ""
+
 game:GetService("Workspace").Gates["5 Bee Gate"].Frame:Destroy()
 game:GetService("Workspace").Gates["15 Bee Gate"].Frame:Destroy()
 game:GetService("Workspace").Gates["25 Bee Gate"].Frame:Destroy()
-game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = ""
-
 
 for _, part in next, workspace:FindFirstChild("FieldDecos"):GetDescendants() do
     if part:IsA("BasePart") then
