@@ -1615,7 +1615,7 @@ function getglitchtoken(v)
             if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.planting then
                 local hashed = math.random(1, 42345252)
                 v.Name = tostring(hashed)
-                repeat
+                repeat task.wait(0.15)
                 api.walkTo(v.Position)
                 until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
             end
