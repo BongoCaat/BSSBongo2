@@ -191,6 +191,17 @@ getgenv().temptable = {
         coordd = CFrame.new(part.Position.X, part.Position.Y + st, part.Position.Z)
         return coordd
     end,
+    ['feed'] = function(x, y, type, amount)
+        if not amount then
+            amount = 1
+        end
+        local bo = tonumber(x)
+        local ba = tonumber(y)
+        local be = type
+        local br = tonumber(amount)
+
+        game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(bo, ba, be, br)
+    end,
     lookat = nil,
     currtool = rtsg()["EquippedCollector"],
     starttime = tick(),
@@ -261,6 +272,14 @@ local collectorstable = {}
 for _, v in next, getupvalues(
                 require(game:GetService("ReplicatedStorage").Collectors).Exists) do
     for e, r in next, v do table.insert(collectorstable, e) end
+end
+local beestable = {}
+for _, v in next, game:GetService("ReplicatedStorage").BeeModels:GetChildren() do
+    table.insert(beestable, v.Name)
+end
+local mutatable = {}
+for _, v in next, game:GetService("ReplicatedStorage").BeeStats.BeeMutations:GetChildren() do
+    table.insert(mutatable, v.Name)
 end
 local fieldstable = {}
 for _, v in next, game.Workspace.FlowerZones:GetChildren() do
@@ -344,94 +363,6 @@ npctable = {
 	["Diamond Mask"] = CFrame.new(-336, 132, -385)
 }
 
---[[rares = {
-        [8492845001] = 3 -- beequip sweatband
-        [8492844885] = 3 -- beequip smiley sticker
-        [8492844788] = 3 -- beequip pink shades 
-        [8492845001] = 3 -- beequip paperclip
-        [8492844487] = 3 -- beequip lei
-        [8492844280] = 3 -- beequip kazoo
-        [8492844176] = 3 -- beequip charm bracelet
-        [8492844048] = 3 -- beequip camo bandana
-        [8492843846] = 3 -- beequip bottlecap
-        [8492843696] = 3 -- beequip beret
-        [8492843567] = 3 -- beequip bead lizard
-        [8492843365] = 3 -- beequip bang snap
-        [8492843086] = 3 -- beequip bandage
-        [6084222899] = 3 -- beequip snow tiara
-        [8492870754] = 3 -- beequip pink shades(1)
-        [8492845400] = 3 -- beequip whistle
-        [8492845290] = 3 -- beequip thumbtack
-        [8492845132] = 3 -- beequip thimble
-        [11715988834] = 3 -- refreshing vial
-        [11715987790] = 3 -- motivating vial
-        [11715986662] = 3 -- satisfying vial
-        [11715985649] = 3 -- invigorating vial
-        [11715984625] = 3 -- comforting vial
-        [11804999979] = 3 -- cog2
-        [11804974025] = 3 -- cog
-        [11782097928] = 3 -- glitched drive
-        [11782096351] = 3 -- blue drive
-        [11782094519] = 3 -- red drive
-        [11782092243] = 3 -- white drive
-		[2314214749] = 3, -- stinger
-		[3967304192] = 3, -- spiritpetal
-		[2028603146] = 3, -- startreat
-		[4483267595] = 3, -- neonberry
-		[4483236276] = 3, -- bitterberry
-		[2306224708] = 2, -- mooncharm
-		[4520736128] = 3, -- atomictreat
-		[4528640710] = 3, -- boxoffrogs
-		[2319943273] = 3, -- starjelly
-		[1674686518] = 3, -- Ticket
-		[1674871631] = 3, -- Ticket
-		[1987257040] = 3, -- gifted diamond egg
-		[1987253833] = 3, -- gifted silver egg
-		[1987255318] = 3, -- gifted golden egg
-		[2007771339] = 3, -- star basic egg
-		[2529092020] = 3, -- Magic Bean (sprout)
-		[2584584968] = 3, -- Enzymes
-		[1471882621] = 2, -- RoyalJelly
-		[1471850677] = 3, -- Diamond egg
-		[1471848094] = 3, -- Silver egg
-		[1471849394] = 3, -- Gold egg
-		[1471846464] = 3, -- Basic egg
-		[3081760043] = 3, -- plastic egg
-		[2863122826] = 3, -- micro-converter
-		[2060626811] = 3, -- ant pass
-		[2659216738] = 2, -- present
-		[4520739302] = 3, -- Mythic Egg
-		[2495936060] = 3, -- blue extract
-		[2028574353] = 1, -- treat
-		[2545746569] = 3, -- oil
-		[3036899811-3036899837] = 3, -- Robo Pass
-		[2676671613] = 3, -- night bell
-		[3835877932] = 3, -- tropical drink
-	    [2542899798] = 3, -- glitter
-		[2495935291] = 3, -- red extract
-		[1472135114] = 0, -- Honey
-		[3030569073] = 3, -- cloud vial
-		[3036899811] = 3, -- rpass
-		[2676715441] = 3, -- festive sprout
-		[3080740120] = 3, -- jelly beans
-		[2863468407] = 3, -- field dice
-		[2504978518] = 3, -- glue
-		[2594434716] = 3, -- translator
-		[3027672238] = 3, -- marshmallo bee
-		[3012679515] = 2, -- Coconut
-		[1629547638] = 2, -- Token link
-		[3582519526] = 2, -- Tornado (wind bee token, collects tokens)
-		[4889322534] = 2, -- Fuzzy bombs
-		[1671281844] = 2, -- photon bee
-		[2305425690] = 2, -- Puppy bond giver
-		[2000457501] = 2, -- Inspire (2x pollen)
-		[3582501342] = 2, -- Cloud
-	    [2319083910] = 2, -- Vicious spikes
-	    [1472256444] = 2, -- Baby bee loot bonus
-	    [177997841] = 2, -- bear bee morph
-	    [1442764904] = 2, -- Gummy storm+
-},]]
-
 local AccessoryTypes = require(game:GetService("ReplicatedStorage").Accessories).GetTypes()
 local MasksTable = {}
 for i, v in pairs(AccessoryTypes) do
@@ -471,6 +402,9 @@ table.sort(spawnerstable)
 table.sort(masktable)
 table.sort(temptable.allplanters)
 table.sort(collectorstable)
+table.sort(beestable)
+table.sort(mutatable)
+table.sort(treatsTable)
 table.sort(donatableItemsTable)
 table.sort(buffTable)
 table.sort(MasksTable)
@@ -767,6 +701,20 @@ getgenv().bongkoc = {
         customplanterdelay33 = 75,
         customplanterdelay34 = 75,
         customplanterdelay35 = 75
+    },
+    beessettings = {
+        general = {
+            x = 1,
+            y = 1,
+            amount = 1
+        },
+        usb = "Basic",
+        usbtoggle = false,
+        ugb = false,
+        foodtype = "Treat",
+        af = false,
+        mutation = "Ability Rate",
+        umb = false
     },
     dispensesettings = {
         blub = false,
@@ -1667,7 +1615,7 @@ function getglitchtoken(v)
             if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.planting then
                 local hashed = math.random(1, 42345252)
                 v.Name = tostring(hashed)
-                repeat task.wait(0.1)
+                repeat
                 api.walkTo(v.Position)
                 until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
             end
@@ -1735,7 +1683,7 @@ function getcrosshairs(v)
     if v.BrickColor ~= BrickColor.new("Lime green") and v.BrickColor ~= BrickColor.new("Flint") then
     if temptable.crosshair then repeat task.wait() until not temptable.crosshair end
     temptable.crosshair = true
-    api.walkTo(v.Position)
+    --api.walkTo(v.Position)
     repeat
         task.wait()
         api.walkTo(v.Position)
@@ -3011,6 +2959,63 @@ for i, v in pairs(buffTable) do
     end)
 end
 
+local ghive = itemstab:CreateSection("Hive Position & Food Type")
+
+ghive:CreateTextBox("X", "default = 1", true, function(Value)
+    if tonumber(Value) then
+        bongkoc.beessettings.general.x = tonumber(Value)
+    end
+end)
+ghive:CreateTextBox("Y", "default = 1", true, function(Value)
+    if tonumber(Value) then
+        bongkoc.beessettings.general.y = tonumber(Value) 
+    end
+end)
+ghive:CreateTextBox("Amount", "default = 1", true, function(Value)
+    if tonumber(Value) then
+        bongkoc.beessettings.general.amount = tonumber(Value) or 1 
+    end
+end)
+ghive:CreateDropdown("Food Type", treatsTable, function(option)
+    bongkoc.vars.selectedTreat = option
+end)
+
+local arjhive = itemstab:CreateSection("Auto Royal Jelly")
+
+arjhive:CreateDropdown("Bee", beestable, function(Value)
+    if tonumber(Value) then
+        bongkoc.beessettings.usb = tonumber(Value) 
+    end
+end)
+arjhive:CreateToggle("Until Selected Bee", nil, function(State) bongkoc.beessettings.usbtoggle = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = "" end end)
+
+local ugbhive = itemstab:CreateSection("Autofeed")
+
+ugbhive:CreateToggle("Food Until Gifted", nil, function(State) bongkoc.beessettings.ugb = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = "" end end)
+ugbhive:CreateToggle("Auto Feed", nil, function(State) bongkoc.beessettings.af = State end)
+
+local feedhive = itemstab:CreateSection("Manual Feeding")
+
+feedhive:CreateButton("Feed Selected Bee", function()
+    temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype, bongkoc.beessettings.general.amount)
+end)
+feedhive:CreateButton("Feed All Bees", function()
+    for xbee = 1, 5, 1 do
+        for ybee = 1, 10, 1 do
+            temptable.feed(xbee, ybee, bongkoc.beessettings.foodtype, bongkoc.beessettings.general.amount)
+        end
+    end
+end)
+
+local umhive = itemstab:CreateSection("Mutation Rolling")
+
+umhive:CreateDropdown("Mutation", mutatable, function(Value)
+    if tonumber(Value) then
+        bongkoc.beessettings.mutation = tonumber(Value)
+    end
+end)
+umhive:CreateToggle("Roll Until Mutation", nil, function(State) bongkoc.beessettings.umb = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = "" end end)
+
 local miscc = misctab:CreateSection("Misc")
 miscc:CreateButton("Ant Challenge Semi-Godmode", function()
     api.tween(1, CFrame.new(93.4228, 32.3983, 553.128))
@@ -3349,9 +3354,9 @@ guiElements["vars"]["discordid"] = webhooksection:CreateTextBox("Discord ID", "Y
     end
 end)
 
-local autofeed = itemstab:CreateSection("Auto Feed")
+--local autofeed = itemstab:CreateSection("Auto Feed(Old)")
 
-local function feedAllBees(treat, amt)
+--[[local function feedAllBees(treat, amt)
     for L = 1, 5 do
         for U = 1, 10 do
             game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(L, U, treat, amt)
@@ -3367,7 +3372,7 @@ guiElements["vars"]["selectedTreatAmount"] = autofeed:CreateTextBox("Treat Amoun
 end)
 autofeed:CreateButton("Feed All Bees", function()
     feedAllBees(bongkoc.vars.selectedTreat, bongkoc.vars.selectedTreatAmount)
-end)
+end)]]
 
 local windShrine = itemstab:CreateSection("Wind Shrine")
 guiElements["vars"]["donoItem"] = windShrine:CreateDropdown("Select Item", donatableItemsTable, function(Option)
@@ -3907,9 +3912,9 @@ task.spawn(function()
                                         local amount, kind = unpack((text:sub(6, text:find("to")-2)):split(" "))
                                         if amount and kind then
                                             if kind == "Blueberries" then
-                                                game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(5, 3, "Blueberry", amount, false)
+                                                game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(1, 1, "Blueberry", amount, false)
                                             elseif kind == "Strawberries" then
-                                                game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(5, 3, "Strawberry", amount, false)
+                                                game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(1, 1, "Strawberry", amount, false)
                                             end                                            
                                             local done = Instance.new("BoolValue", v)
                                             done.Name = "done"
@@ -4837,7 +4842,7 @@ end)
 
 task.spawn(function()
     while task.wait(0.05) do
-        if bongkoc.toggles.autofarm and not temptable.planting and not temptable.started.mondo and not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant and not temptable.started.monsters and not bongkoc.toggles.traincrab then
+        if bongkoc.toggles.autofarm and not temptable.planting and not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant and not bongkoc.toggles.traincrab then
             if bongkoc.toggles.autosamovar then
                 game:GetService("ReplicatedStorage").Events.ToyEvent:FireServer("Samovar")
                 platformm = game.Workspace.Toys.Samovar.Platform
@@ -5781,9 +5786,34 @@ if _G.autoload then
     end
 end
 
+task.spawn(function()
+    while task.wait(0.1) do
+        if bongkoc.beessettings.usbtoggle then
+            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match(bongkoc.beessettings.usb) then
+                temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "RoyalJelly")
+            end
+        end
+        if bongkoc.beessettings.ugb then
+            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match("Gifted") then
+                temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype)
+            end
+        end
+        if bongkoc.beessettings.af then
+            temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype, bongkoc.beessettings.general.amount)
+        end
+        if bongkoc.beessettings.umb then
+            if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text:match(bongkoc.beessettings.mutation) then
+                temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "Bitterberry", bongkoc.beessettings.general.amount)
+            end
+        end
+    end
+end)
+
 game:GetService("Workspace").Gates["5 Bee Gate"].Frame:Destroy()
 game:GetService("Workspace").Gates["15 Bee Gate"].Frame:Destroy()
 game:GetService("Workspace").Gates["25 Bee Gate"].Frame:Destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = ""
+
 
 for _, part in next, workspace:FindFirstChild("FieldDecos"):GetDescendants() do
     if part:IsA("BasePart") then
@@ -5848,3 +5878,4 @@ for i, v in next, workspace.Decorations.Misc:GetDescendants() do
         v.Transparency = 0.75
     end
 end
+warn("LOADED BONGKOC!!")
