@@ -273,10 +273,10 @@ for _, v in next, getupvalues(
                 require(game:GetService("ReplicatedStorage").Collectors).Exists) do
     for e, r in next, v do table.insert(collectorstable, e) end
 end
-local beestable = {}
+--[[local beestable = {}
 for _, v in next, game:GetService("ReplicatedStorage").BeeModels:GetChildren() do
     table.insert(beestable, v.Name)
-end
+end]]
 local mutatable = {}
 for _, v in next, game:GetService("ReplicatedStorage").BeeStats.BeeMutations:GetChildren() do
     table.insert(mutatable, v.Name)
@@ -402,7 +402,7 @@ table.sort(spawnerstable)
 table.sort(masktable)
 table.sort(temptable.allplanters)
 table.sort(collectorstable)
-table.sort(beestable)
+--table.sort(beestable)
 table.sort(mutatable)
 table.sort(treatsTable)
 table.sort(donatableItemsTable)
@@ -708,8 +708,8 @@ getgenv().bongkoc = {
             y = 1,
             amount = 1
         },
-        usb = "Basic",
-        usbtoggle = false,
+        --usb = "",
+        --usbtoggle = false,
         ugb = false,
         foodtype = "Treat",
         af = false,
@@ -2980,14 +2980,14 @@ ghive:CreateDropdown("Food Type", treatsTable, function(option)
     bongkoc.vars.selectedTreat = option
 end)
 
-local arjhive = itemstab:CreateSection("Auto Royal Jelly")
+--[[local arjhive = itemstab:CreateSection("Auto Royal Jelly")
 
-arjhive:CreateDropdown("Bee", beestable, function(Value)
-    if tonumber(Value) then
-        bongkoc.beessettings.usb = tonumber(Value) 
+arjhive:CreateDropdown("Bee", beestable, function(Option)
+    if tonumber(Option) then
+        bongkoc.beessettings.usb = tonumber(Option) 
     end
 end)
-arjhive:CreateToggle("Until Selected Bee", nil, function(State) bongkoc.beessettings.usbtoggle = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = "" end end)
+arjhive:CreateToggle("Until Selected Bee", nil, function(State) bongkoc.beessettings.usbtoggle = State if not State then game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text = "" end end)]]
 
 local ugbhive = itemstab:CreateSection("Autofeed")
 
@@ -5788,11 +5788,11 @@ end
 
 task.spawn(function()
     while task.wait(0.1) do
-        if bongkoc.beessettings.usbtoggle then
+        --[[if bongkoc.beessettings.usbtoggle then
             if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match(bongkoc.beessettings.usb) then
                 temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "RoyalJelly")
             end
-        end
+        end]]
         if bongkoc.beessettings.ugb then
             if not game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.TypeName.Text:match("Gifted") then
                 temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, bongkoc.beessettings.foodtype)
