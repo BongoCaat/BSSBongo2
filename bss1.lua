@@ -1486,7 +1486,7 @@ function converthoney()
     task.wait(0)
     if temptable.converting and not temptable.planting then
         if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
-            api.tween(1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+            api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
             task.wait(0.9)
             if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
                 game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
@@ -1630,15 +1630,15 @@ function getglitchtoken(v)
     temptable.glitched = true
     pcall(function()
         for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
-            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956")  then
+            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.started.vicious and not temptable.started.windy and not bongkoc.toggles.trainsnail then
                 local hashed = math.random(1, 42345252)
                 v.Name = tostring(hashed)
-                repeat task.wait(0.075)
+                repeat task.wait()
                 api.walkTo(v.Position)
                 until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
             end
         end
-    task.wait(0.005)
+    task.wait()
     temptable.glitched = false
     table.remove(temptable.glitcheds, table.find(temptable.glitcheds, v))
     end)
@@ -3783,7 +3783,7 @@ task.spawn(function()
             if bongkoc.toggles.farmfuzzy then
                 getfuzzy()
             end
-            if bongkoc.toggles.farmglitchedtokens and not temptable.planting and not temptable.started.monsters and not temptable.converting then
+            if bongkoc.toggles.farmglitchedtokens then
                 getglitchtoken()
             end
             if bongkoc.toggles.farmflame then
@@ -3794,7 +3794,7 @@ task.spawn(function()
 end)
 
 game.Workspace.Camera.DupedTokens.ChildAdded:Connect(function(v)
-    if not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant then
+    if not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant and not temptable.planting and not temptable.converting and not temptable.started.monsters then
         if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.started.vicious and not temptable.started.monsters and bongkoc.toggles.autofarm and not temptable.started.ant and bongkoc.toggles.farmglitchedtokens and (v.Position - api.humanoidrootpart().Position).magnitude < temptable.magnitude and not temptable.converting then
             table.insert(temptable.glitcheds, v)
             getglitchtoken(v)
@@ -4119,14 +4119,14 @@ task.spawn(function()
                 
                 if bongkoc.toggles.convertballoons and not temptable.planting and not temptable.started.vicious and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious and bongkoc.vars.convertballoonpercent and gethiveballoon() and getBuffTime("8083443467") < tonumber(bongkoc.vars.convertballoonpercent) / 100 then
                     temptable.tokensfarm = false
-                    api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+                    api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
                     task.wait(2)
                     api.humanoidrootpart().Velocity = Vector3.new(0, 0, 0)
-                    api.tween(0.1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+                    api.tween(0.1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
                     temptable.converting = true
                     repeat converthoney() until player.CoreStats.Pollen.Value == 0
                     if bongkoc.toggles.convertballoons and gethiveballoon() then
-                        task.wait(6)
+                        task.wait(10)
                         repeat
                             task.wait()
                             converthoney()
@@ -4278,10 +4278,10 @@ task.spawn(function()
                 elseif tonumber(temptable.pollenpercentage) >= tonumber(bongkoc.vars.convertat) and not bongkoc.toggles.convertion --[[and not bongkoc.toggles.disableconversion]] and not temptable.started.vicious and not temptable.started.windy and not temptable.planting and not temptable.detected.windy and not temptable.detected.vicious then
                     if not bongkoc.toggles.disableconversion then
                         temptable.tokensfarm = false
-                        api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+                        api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
                         task.wait(2)
                         api.humanoidrootpart().Velocity = Vector3.new(0, 0, 0)
-                        api.tween(0.1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+                        api.tween(0.1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
                         temptable.converting = true
                         repeat converthoney() until player.CoreStats.Pollen.Value == 0
                         if bongkoc.toggles.convertballoons and bongkoc.vars.convertballoonpercent == 0 and gethiveballoon() then
@@ -4746,7 +4746,7 @@ task.spawn(function()
                 end
             end
         end
-        if bongkoc.toggles.farmrares and not temptable.planting and not temptable.started.ant and not temptable.converting and not temptable.collecting.collecthoneytoken then
+        if bongkoc.toggles.farmrares and not temptable.planting and not temptable.started.ant and not temptable.converting then
             for k, v in next, game.workspace.Collectibles:GetChildren() do
                 if v.CFrame.YVector.Y == 1 then
                     if v.Transparency == 0 then
