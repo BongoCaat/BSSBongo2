@@ -1486,12 +1486,12 @@ function converthoney()
     task.wait(0)
     if temptable.converting and not temptable.planting then
         if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
-            api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
+            api.tween(1, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9))
             task.wait(0.9)
             if player.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and player.PlayerGui.ScreenGui.ActivateButton.BackgroundColor3 ~= Color3.new(201, 39, 28) or (player.SpawnPos.Value.Position - api.humanoidrootpart().Position).magnitude > 13 then
                 game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
             end
-            task.wait(0.15)
+            task.wait(0.1)
         end
     end
 end
@@ -1630,7 +1630,7 @@ function getglitchtoken(v)
     temptable.glitched = true
     pcall(function()
         for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
-            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.planting then
+            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956")  then
                 local hashed = math.random(1, 42345252)
                 v.Name = tostring(hashed)
                 repeat task.wait(0.075)
@@ -4126,7 +4126,7 @@ task.spawn(function()
                     temptable.converting = true
                     repeat converthoney() until player.CoreStats.Pollen.Value == 0
                     if bongkoc.toggles.convertballoons and gethiveballoon() then
-                        task.wait(10)
+                        task.wait(6)
                         repeat
                             task.wait()
                             converthoney()
