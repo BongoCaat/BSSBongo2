@@ -731,7 +731,7 @@ getgenv().bongkoc = {
         general = {
             x = 1,
             y = 1,
-            amount = 1
+            amount = 3
         },
     },
     dispensesettings = {
@@ -2979,17 +2979,17 @@ end
 
 local ghive = itemstab:CreateSection("Hive")
 
-ghive:CreateTextBox("X", "default = 1", true, function(Value)
+ghive:CreateTextBox("X", "1 -10|Default = 1", true, function(Value)
     if tonumber(Value) then
         bongkoc.beessettings.general.x = tonumber(Value)
     end
 end)
-ghive:CreateTextBox("Y", "default = 1", true, function(Value)
+ghive:CreateTextBox("Y", "1 - 5|Default = 1", true, function(Value)
     if tonumber(Value) then
         bongkoc.beessettings.general.y = tonumber(Value) 
     end
 end)
-ghive:CreateTextBox("Amount", "default = 1", true, function(Value)
+ghive:CreateTextBox("Amount", "Default = 3", true, function(Value)
     if tonumber(Value) then
         bongkoc.beessettings.general.amount = tonumber(Value)-- or 1 
     end
@@ -3927,8 +3927,10 @@ task.spawn(function()
                                         local amount, kind = unpack((text:sub(6, text:find("to")-2)):split(" "))
                                         if amount and kind then
                                             if kind == "Blueberries" then
+                                                --temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "Blueberry", 5)
                                                 game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(1, 1, "Blueberry", amount, false)
                                             elseif kind == "Strawberries" then
+                                                --temptable.feed(bongkoc.beessettings.general.x, bongkoc.beessettings.general.y, "Strawberry", 5)
                                                 game:GetService("ReplicatedStorage").Events.ConstructHiveCellFromEgg:InvokeServer(1, 1, "Strawberry", amount, false)
                                             end                                            
                                             local done = Instance.new("BoolValue", v)
@@ -5602,15 +5604,9 @@ task.spawn(function()
         local windUpd = panel2:CreateButton("Wind Shrine: 00:00", function()
             api.tween(1,
                       CFrame.new(
-                          game.Workspace.NPCs["Wind Shrine"]
-                              .Circle.Position + Vector3.new(0, 5, 0)))
+                       game.Workspace.NPCs["Wind Shrine"]
+                           .Circle.Position + Vector3.new(0, 5, 0)))
         end)
-        --[[local stickUpd = panel2:CreateButton("Stick Bug: 00:00", function()
-            api.tween(1,
-                      CFrame.new(
-                          game.Workspace.NPCs["Stick Bug"]
-                              .Circle.Position + Vector3.new(0, 5, 0)))
-        end)]]
         local rfbUpd = panel2:CreateButton("Red Field Booster: 00:00",
                                            function()
             api.tween(1,
@@ -5627,53 +5623,138 @@ task.spawn(function()
         end)
         local wfbUpd = panel2:CreateButton("White Field Booster: 00:00",
                                            function()
-            api.tween(1, CFrame.new(
+            api.tween(1, 
+                      CFrame.new(
                           game.Workspace.Toys["Field Booster"]
                               .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local cocoDispUpd = panel2:CreateButton("Coconut Dispenser: 00:00",
-                                                function()
+        local cocoDispUpd = panel2:CreateButton("Coconut Dispenser: 00:00", function()
             api.tween(1,
                       CFrame.new(
-                          game.Workspace.Toys["Coconut Dispenser"]
-                              .Platform.Position + Vector3.new(0, 5, 0)))
+                       game.Workspace.Toys["Coconut Dispenser"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local ic1 = panel2:CreateButton("Instant Converter A: 00:00", function()
+        local glueDispUpd = panel2:CreateButton("Glue Dispenser: 00:00", function()
             api.tween(1,
                       CFrame.new(
-                          game.Workspace.Toys["Instant Converter"]
-                              .Platform.Position + Vector3.new(0, 5, 0)))
+                       game.Workspace.Toys["Glue Dispenser"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local emmaUpd = panel2:CreateButton("Extreme Memory Match: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Extreme Memory Match"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local nmmaUpd = panel2:CreateButton("Night Memory Match: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Night Memory Match"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local mmmaUpd = panel2:CreateButton("Mega Memory Match: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Mega Memory Match"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local ic1 = panel2:CreateButton("Instant Converter: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Instant Converter"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
         end)
         local ic2 = panel2:CreateButton("Instant Converter B: 00:00", function()
             api.tween(1,
                       CFrame.new(
-                          game.Workspace.Toys["Instant Converter B"]
-                              .Platform.Position + Vector3.new(0, 5, 0)))
+                       game.Workspace.Toys["Instant Converter B"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
         end)
         local ic3 = panel2:CreateButton("Instant Converter C: 00:00", function()
             api.tween(1,
                       CFrame.new(
-                          game.Workspace.Toys["Instant Converter C"]
-                              .Platform.Position + Vector3.new(0, 5, 0)))
+                       game.Workspace.Toys["Instant Converter C"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
         end)
         local wcUpd = panel2:CreateButton("Wealth Clock: 00:00", function()
-            api.tween(1, CFrame.new(
-                          game.Workspace.Toys["Wealth Clock"]
-                              .Platform.Position + Vector3.new(0, 5, 0)))
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Wealth Clock"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local hsmUpd = panel2:CreateButton("Honeystorm: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys.Honeystorm
+                           .Platform.Position + Vector3.new(0, 5, 0)))
         end)
         local mmsUpd = panel2:CreateButton("Mythic Meteor Shower: 00:00", function()
-            api.tween(1, CFrame.new( game.Workspace.Toys["Mythic Meteor Shower"].Platform.Position + Vector3.new(0, 5, 0)))
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Mythic Meteor Shower"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local honwUpd = panel2:CreateButton("Honey Wreath: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Honey Wreath"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local snomUpd = panel2:CreateButton("Snow Machine: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Snow Machine"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local samvUpd = panel2:CreateButton("Samovar: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys.Samovar
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local oneaUpd = panel2:CreateButton("Onett's Lid Art: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Onett's Lid Art"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local beefUpd = panel2:CreateButton("Beesmas Feast: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Beesmas Feast"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local honcUpd = panel2:CreateButton("Honeyday Candles: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Honeyday Candles"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local stocUpd = panel2:CreateButton("Stockings: 00:00", function()
+            api.tween(1, CFrame.new( game.Workspace.Toys.Stockings.Platform.Position + Vector3.new(0, 5, 0)))
         end)
         local utilities = {
             ["Red Field Booster"] = rfbUpd,
             ["Blue Field Booster"] = bfbUpd,
             ["Field Booster"] = wfbUpd,
             ["Coconut Dispenser"] = cocoDispUpd,
+            ["Glue Dispenser"] = glueDispUpd,
+            ["Extreme Memory Match"] = emmaUpd,
+            ["Night Memory Match"] = nmmaUpd,
+            ["Mega Memory Match"] = mmmaUpd,
             ["Instant Converter"] = ic1,
             ["Instant Converter B"] = ic2,
             ["Instant Converter C"] = ic3,
             ["Wealth Clock"] = wcUpd,
-            ["Mythic Meteor Shower"] = mmsUpd
+            ["Honeystorm"] = hsmUpd,
+            ["Mythic Meteor Shower"] = mmsUpd,
+            ["Honey Wreath"] = honwUpd,
+            ["Snow Machine"] = snomUpd,
+            ["Samovar"] = samvUpd,
+            ["Onett's Lid Art"] = oneaUpd,
+            ["Beesmas Feast"] = beefUpd,
+            ["Honeyday Candles"] = honcUpd,
+            ["Stockings"] = stocUpd
         }
         while task.wait(1) do
             if bongkoc.toggles.enablestatuspanel then
@@ -5715,28 +5796,6 @@ task.spawn(function()
                         end
                     end
                 end
-                --[[local cooldown = require(game.ReplicatedStorage.TimeString)(
-                                     3600 -
-                                         (require(game.ReplicatedStorage.OsTime)() -
-                                             (require(
-                                                 game.ReplicatedStorage
-                                                     .StatTools).GetLastCooldownTime(
-                                                 v1, "StickBug") or 0)))
-                if cooldown == "" then
-                    stickUpd:UpdateText("Stick Bug: Ready")
-                else
-                    stickUpd:UpdateText("Stick Bug: " .. cooldown)
-                end
-                for i, v in pairs(utilities) do
-                    local cooldown, isUsable = getToyCooldown(i)
-                    if cooldown ~= nil and isUsable ~= nil then
-                        if isUsable then
-                            v:UpdateText(i .. ": Ready")
-                        else
-                            v:UpdateText(i .. ": " .. require(game.ReplicatedStorage.TimeString)(cooldown))
-                        end
-                    end
-                end]]
             end
         end
     end)
@@ -5826,9 +5885,9 @@ end)
 
 game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.BeePopUp.MutationFrame.MutationLabel.Text = ""
 
-game:GetService("Workspace").Gates["5 Bee Gate"].Frame:Destroy()
-game:GetService("Workspace").Gates["15 Bee Gate"].Frame:Destroy()
-game:GetService("Workspace").Gates["25 Bee Gate"].Frame:Destroy()
+--game:GetService("Workspace").Gates["5 Bee Gate"].Frame:Destroy()
+--game:GetService("Workspace").Gates["15 Bee Gate"].Frame:Destroy()
+--game:GetService("Workspace").Gates["25 Bee Gate"].Frame:Destroy()
 
 for _, part in next, workspace:FindFirstChild("FieldDecos"):GetDescendants() do
     if part:IsA("BasePart") then
@@ -5844,6 +5903,13 @@ for _, part in next, workspace:FindFirstChild("Decorations"):GetDescendants() do
         part.Transparency = part.Transparency < 0.75 and 0.75 or part.Transparency
         task.wait()
     end
+end
+for _, Gate in next, workspace.Gates:GetDescendants() do 
+    if Gate:IsA("BasePart") and string.find(Gate.parent.Name, "Bee Gate") then 
+        Gate.CanCollide = false 
+        Gate.Transparency = Gate.Transparency < 0.5 and 0.5 or Gate.Transparency
+        task.wait() 
+    end 
 end
 --[[for _, part in next, workspace:FindFirstChild("Gates"):GetDescendants() do
     if part:IsA("BasePart") and
