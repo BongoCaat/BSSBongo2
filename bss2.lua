@@ -3737,11 +3737,13 @@ task.spawn(function()
             if temptable.converting and temptable.collecting.collecthoneytoken then
                 if not honeytoggleouyfyt then
                     honeytoggleouyfyt = true
+                    wait(4)
                     maskequip("Honey Mask")
                 end
             else
                 if honeytoggleouyfyt then
                     honeytoggleouyfyt = false
+                    wait(3)
                     maskequip(bongkoc.vars.defmask)
                 end
             end
@@ -5187,13 +5189,13 @@ task.spawn(function() while task.wait(1) do
             if temptable.LastFieldColor == FieldColor then continue end
             temptable.LastFieldColor = FieldColor
             if FieldColor == "Blue" then
-                maskequip("Bubble Mask")
+                --maskequip("Bubble Mask")
                 maskequip("Diamond Mask")
             elseif FieldColor == "Red" then
-                maskequip("Fire Mask")
+                --maskequip("Fire Mask")
                 maskequip("Demon Mask")
             else
-                maskequip("Honey Mask")
+                --maskequip("Honey Mask")
                 maskequip("Gummy Mask")
             end
         end
