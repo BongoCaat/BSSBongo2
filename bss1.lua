@@ -3734,16 +3734,16 @@ local honeytoggleouyfyt = false
 task.spawn(function()
     while task.wait(0.5) do
         if bongkoc.toggles.honeymaskconv then
-            if temptable.converting and temptable.collecting.collecthoneytoken then
+            if temptable.converting or temptable.collecting.collecthoneytoken then
                 if not honeytoggleouyfyt then
                     honeytoggleouyfyt = true
-                    wait(4)
+                    wait(1.5)
                     maskequip("Honey Mask")
                 end
             else
                 if honeytoggleouyfyt then
                     honeytoggleouyfyt = false
-                    wait(3)
+                    wait(1)
                     maskequip(bongkoc.vars.defmask)
                 end
             end
