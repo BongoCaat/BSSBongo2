@@ -2992,12 +2992,12 @@ end
 
 local ghive = itemstab:CreateSection("Hive")
 
-ghive:CreateTextBox("X", "1 -10|Default = 1", true, function(Value)
+ghive:CreateTextBox("X", "1 - 5|Default = 1", true, function(Value)
     if tonumber(Value) then
         bongkoc.beessettings.general.x = tonumber(Value)
     end
 end)
-ghive:CreateTextBox("Y", "1 - 5|Default = 1", true, function(Value)
+ghive:CreateTextBox("Y", "1 - 10|Default = 1", true, function(Value)
     if tonumber(Value) then
         bongkoc.beessettings.general.y = tonumber(Value) 
     end
