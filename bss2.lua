@@ -2589,7 +2589,8 @@ guiElements["toggles"]["enablestatuspanel"] = information:CreateToggle("Status P
     bongkoc.toggles.enablestatuspanel = bool
     for _,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
         if string.find(v.Name, "Mob Panel") or
-            string.find(v.Name, "Utility Panel") then
+            string.find(v.Name, "Utility Panel") or
+            string.find(v.Name, "🎄Beesmas Panel🎄") then
             v.Visible = bool
         end
     end
@@ -5711,43 +5712,50 @@ task.spawn(function()
                        game.Workspace.Toys["Mythic Meteor Shower"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local honwUpd = panel2:CreateButton("Honey Wreath: 00:00", function()
+        local panel3 = hometab:CreateSection("🎄Beesmas Panel🎄")
+        local snoUpd = panel3:CreateButton("Snowbear: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys.Snowbear
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
+        local honwUpd = panel3:CreateButton("Honey Wreath: 00:00", function()
             api.tween(1,
                       CFrame.new(
                        game.Workspace.Toys["Honey Wreath"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local snomUpd = panel2:CreateButton("Snow Machine: 00:00", function()
+        local snomUpd = panel3:CreateButton("Snow Machine: 00:00", function()
             api.tween(1,
                       CFrame.new(
                        game.Workspace.Toys["Snow Machine"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local samvUpd = panel2:CreateButton("Samovar: 00:00", function()
+        local samvUpd = panel3:CreateButton("Samovar: 00:00", function()
             api.tween(1,
                       CFrame.new(
                        game.Workspace.Toys.Samovar
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local oneaUpd = panel2:CreateButton("Onett's Lid Art: 00:00", function()
+        local oneaUpd = panel3:CreateButton("Onett's Lid Art: 00:00", function()
             api.tween(1,
                       CFrame.new(
                        game.Workspace.Toys["Onett's Lid Art"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local beefUpd = panel2:CreateButton("Beesmas Feast: 00:00", function()
+        local beefUpd = panel3:CreateButton("Beesmas Feast: 00:00", function()
             api.tween(1,
                       CFrame.new(
                        game.Workspace.Toys["Beesmas Feast"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local honcUpd = panel2:CreateButton("Honeyday Candles: 00:00", function()
+        local honcUpd = panel3:CreateButton("Honeyday Candles: 00:00", function()
             api.tween(1,
                       CFrame.new(
                        game.Workspace.Toys["Honeyday Candles"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
-        local stocUpd = panel2:CreateButton("Stockings: 00:00", function()
+        local stocUpd = panel3:CreateButton("Stockings: 00:00", function()
             api.tween(1, CFrame.new( game.Workspace.Toys.Stockings.Platform.Position + Vector3.new(0, 5, 0)))
         end)
         local utilities = {
@@ -5765,6 +5773,7 @@ task.spawn(function()
             ["Wealth Clock"] = wcUpd,
             ["Honeystorm"] = hsmUpd,
             ["Mythic Meteor Shower"] = mmsUpd,
+            ["Snowbear"] = snoUpd,
             ["Honey Wreath"] = honwUpd,
             ["Snow Machine"] = snomUpd,
             ["Samovar"] = samvUpd,
