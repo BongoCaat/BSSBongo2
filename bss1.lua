@@ -133,6 +133,7 @@ getgenv().temptable = {
         killmondo = false,
         vicious = false,
         windy = false,
+        commando = false
 	--killstickbug = false
     },
     allplanters = {},
@@ -961,6 +962,10 @@ function disableall()
         bongkoc.toggles.killwindy = false
         temptable.cache.windy = true
     end
+    if bongkoc.toggles.traincommando and not temptable.started.commando then
+        bongkoc.toggles.traincommando = false
+        temptable.cache.commando = true
+    end
     --[[if bongkoc.toggles.killstickbug and not temptable.started.stickbug then 
 	    bongkoc.toggles.killstickbug = false 
 	    temptable.cache.killstickbug = true 
@@ -984,6 +989,10 @@ function enableall()
         bongkoc.toggles.killwindy = true
         temptable.cache.windy = false
     end
+    if temptable.cache.commando then
+        bongkoc.toggles.traincommando = true
+        temptable.cache.commando = false
+    end
     --[[if temptable.cache.killstickbug then 
 	    bongkoc.toggles.killstickbug = true 
 	    temptable.cache.killstickbug = false
@@ -991,7 +1000,7 @@ function enableall()
 end
 
 function gettoken(v3, farmclosest)
-    if bongkoc.toggles.bloatfarm and temptable.foundpopstar then return end
+    if bongkoc.toggles.bloatfarm and temptable.foundpopstar or temptable.doingcrosshairs then return end
     if not v3 then v3 = fieldposition end
     task.wait()
     if farmclosest then
@@ -1020,14 +1029,14 @@ function gettoken(v3, farmclosest)
                 local farmed = Instance.new("BoolValue", closesttoken.Token)
                 farmed.Name = "farmed"
                 task.spawn(function()
-                    task.wait(0.85)
+                    task.wait(0.95)
                     if closesttoken.Token and closesttoken.Token.Parent then
                         farmed.Parent = nil
                     end
                 end)
             end
         end
-    end
+    else
         for e, r in next, game.Workspace.Collectibles:GetChildren() do
             itb = false
             if r:FindFirstChildOfClass("Decal") and bongkoc.toggles.enabletokenblacklisting then
@@ -1035,11 +1044,12 @@ function gettoken(v3, farmclosest)
                     itb = true
                 end
             end
-            if tonumber((r.Position - api.humanoidrootpart().Position).magnitude) <= temptable.magnitude / 1.2 and not itb and (v3 - r.Position).magnitude <= temptable.magnitude then
+            if tonumber((r.Position - api.humanoidrootpart().Position).magnitude) <= temptable.magnitude / 1.4 and not itb and (v3 - r.Position).magnitude <= temptable.magnitude then
                 farm(r)
             end
         end
     end
+end
 
 function makesprinklers(position, onlyonesprinkler)
     local sprinkler = rtsg().EquippedSprinkler
@@ -1414,7 +1424,7 @@ function collectplanters()
             task.wait(1)
             playeractivescommand:FireServer({["Name"] = v .. " Planter"})
             for i = 1, 5 do
-                gettoken(soil.Position) 
+                gettoken(soil.Position)
             end
             task.wait(3)
         end
@@ -1629,18 +1639,20 @@ function getglitchtoken(v)
     if temptable.glitched then repeat task.wait() until not temptable.glitched end
     temptable.glitched = true
     pcall(function()
-        for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
-            if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.started.vicious and not temptable.started.windy and not bongkoc.toggles.trainsnail then
-                local hashed = math.random(1, 42345252)
-                v.Name = tostring(hashed)
-                repeat task.wait()
-                api.walkTo(v.Position)
-                until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
+        if not temptable.converting and not temptable.started.monsters and not temptable.started.vicious and not temptable.started.windy and not bongkoc.toggles.trainsnail and not temptable.planting then
+            for i,v in next, game.Workspace.Camera.DupedTokens:GetChildren() do
+                if v.Name == "C" and v:FindFirstChild("FrontDecal") and string.find(v.FrontDecal.Texture,"5877939956") and not temptable.converting and not temptable.started.monsters and not temptable.started.vicious and not temptable.started.windy and not bongkoc.toggles.trainsnail then
+                    local hashed = math.random(1, 42345252)
+                    v.Name = tostring(hashed)
+                    repeat task.wait()
+                    api.walkTo(v.Position)
+                    until not game.Workspace.Camera.DupedTokens:FindFirstChild(hashed)
+                end
             end
         end
-    task.wait()
-    temptable.glitched = false
-    table.remove(temptable.glitcheds, table.find(temptable.glitcheds, v))
+        task.wait()
+        temptable.glitched = false
+        table.remove(temptable.glitcheds, table.find(temptable.glitcheds, v))
     end)
 end
 
@@ -1763,7 +1775,7 @@ function docrosshairs()
                 if (v.Position - api.humanoidrootpart().Position).magnitude > 200 then continue end
                 if getBuffTime("8172818074") > 0.5 and getBuffStack("8172818074") > 9 and getBuffTime("5101329167") == 0 then
                     if v.BrickColor == BrickColor.new("Alder") then
-                        task.wait(0.065)
+                        task.wait(0.5)
                         local save_height = v.Position.y
                         repeat
                             task.wait()
@@ -3908,6 +3920,9 @@ task.spawn(function()
                                 if not string.find(v.Text, "Puffshroom") then
                                     if text:find(" Goo ") then
                                         temptable.usegumdropsforquest = true
+                                        if string.find(v.Text, "Complete!") then
+                                            temptable.usegumpdropsforquest = false
+                                        end
                                     end
                                     if api.returnvalue(fieldstable, text) and not string.find(v.Text, "Complete!") and not api.findvalue(bongkoc.blacklistedfields, api.returnvalue(fieldstable, text)) then
                                         d = api.returnvalue(fieldstable, text)
@@ -4200,7 +4215,7 @@ task.spawn(function()
                         if bongkoc.toggles.killmondo then
                             while bongkoc.toggles.killmondo and game.Workspace.Monsters:FindFirstChild("Mondo Chick (Lvl 8)") and not temptable.started.vicious and not temptable.started.windy and not temptable.planting and not temptable.started.monsters do
                                 temptable.started.mondo = true
-                                while game.Workspace.Monsters:FindFirstChild("Mondo Chick (Lvl 8)") do
+                                while game.Workspace.Monsters:FindFirstChild("Mondo Chick (Lvl 8)") and bongkoc.toggles.killmondo do
                                     disableall()
                                     game.Workspace.Map.Ground.HighBlock.CanCollide = false
                                     mondopition = game.Workspace.Monsters["Mondo Chick (Lvl 8)"].Head.Position
@@ -4231,7 +4246,7 @@ task.spawn(function()
                         end
                         --if bongkoc.toggles.farmboostedfield then farmboostedfield() end
                         if (fieldposition - api.humanoidrootpart().Position).magnitude > temptable.magnitude and findField(api.humanoidrootpart().CFrame.p) ~= findField(fieldposition) and not temptable.planting and not temptable.doingcrosshairs and not temptable.doingbubbles then
-                            api.teleport(fieldpos)
+                            api.tween(0.1, fieldpos)
                             task.spawn(function()
                                 task.wait(0.45)
                                 if bongkoc.toggles.autosprinkler then
