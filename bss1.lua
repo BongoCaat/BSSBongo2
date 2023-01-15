@@ -4750,7 +4750,8 @@ task.spawn(function()
                     if v.Transparency == 0 then
                         decal = v:FindFirstChildOfClass("Decal")
                         if decal.Texture == "1674871631" or decal.Texture == "rbxassetid://1674871631" then
-                            api.humanoidrootpart().CFrame = v.CFrame
+                            api.tween(0.3, v.CFrame)
+                            --api.humanoidrootpart().CFrame = v.CFrame
                             break
                         end
                     end
@@ -5712,6 +5713,12 @@ task.spawn(function()
                        game.Workspace.Toys["Mythic Meteor Shower"]
                            .Platform.Position + Vector3.new(0, 5, 0)))
         end)
+        local serUpd = panel2:CreateButton("Special Sprout Summoner: 00:00", function()
+            api.tween(1,
+                      CFrame.new(
+                       game.Workspace.Toys["Sprout Summoner"]
+                           .Platform.Position + Vector3.new(0, 5, 0)))
+        end)
         local panel3 = hometab:CreateSection("🎄Beesmas Panel🎄")
         local snoUpd = panel3:CreateButton("Snowbear: 00:00", function()
             api.tween(1,
@@ -5773,6 +5780,7 @@ task.spawn(function()
             ["Wealth Clock"] = wcUpd,
             ["Honeystorm"] = hsmUpd,
             ["Mythic Meteor Shower"] = mmsUpd,
+            ["Sprout Summoner"] = serUpd,
             ["Snowbear"] = snoUpd,
             ["Honey Wreath"] = honwUpd,
             ["Snow Machine"] = snomUpd,
