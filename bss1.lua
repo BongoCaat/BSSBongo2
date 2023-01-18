@@ -3728,7 +3728,7 @@ end end)
 local demontoggleouyfyt = false
 task.spawn(function()
 	while wait(1) do
-		if temptable.started.mondo or temptable.started.monsters or temptable.started.vicious or temptable.started.windy or or temptable.started.ant or bongkoc.toggles.traincrab or bongkoc.toggles.traincommando or bongkoc.toggles.trainsnail then
+		if temptable.started.mondo or temptable.started.monsters or temptable.started.vicious or temptable.started.windy or temptable.started.ant or bongkoc.toggles.traincrab or bongkoc.toggles.traincommando or bongkoc.toggles.trainsnail then
 			if demontoggleouyfyt == false then
 				demontoggleouyfyt = true
 				game:GetService("ReplicatedStorage").Events.ItemPackageEvent:InvokeServer("Equip", {Mute=false;Type="Demon Mask";Category="Accessory"})
