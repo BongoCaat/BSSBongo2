@@ -3728,7 +3728,7 @@ end end)
 local demontoggleouyfyt = false
 task.spawn(function()
 	while wait(1) do
-		if temptable.started.mondo or temptable.started.monsters or temptable.started.vicious or temptable.started.windy or bongkoc.toggles.traincrab or bongkoc.toggles.traincommando or bongkoc.toggles.trainsnail then
+		if temptable.started.mondo or temptable.started.monsters or temptable.started.vicious or temptable.started.windy or or temptable.started.ant or bongkoc.toggles.traincrab or bongkoc.toggles.traincommando or bongkoc.toggles.trainsnail then
 			if demontoggleouyfyt == false then
 				demontoggleouyfyt = true
 				game:GetService("ReplicatedStorage").Events.ItemPackageEvent:InvokeServer("Equip", {Mute=false;Type="Demon Mask";Category="Accessory"})
@@ -5198,7 +5198,7 @@ end)
 end)]]
 
 task.spawn(function() while task.wait(1) do
-    if bongkoc.toggles.autoequipmask and not temptable.converting and not temptable.started.monsters and not temptable.started.windy and not temptable.planting and not temptable.started.vicious and not bongkoc.toggles.traincrab and not bongkoc.toggles.trainsnail and api.humanoidrootpart() then
+    if bongkoc.toggles.autoequipmask and bongkoc.toggles.autofarm and not temptable.converting and not temptable.started.monsters and not temptable.started.windy and not temptable.planting and not temptable.started.vicious and not temptable.started.ant and not bongkoc.toggles.traincrab and not bongkoc.toggles.trainsnail and api.humanoidrootpart() then
         if findFieldWithRay(api.humanoidrootpart().Position, Vector3.new(0,-90,0)) then
             local MaskField = findFieldWithRay(api.humanoidrootpart().Position, Vector3.new(0,-90,0))
             local FieldColor
