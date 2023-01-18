@@ -4965,7 +4965,7 @@ end)
 
 task.spawn(function()
     while task.wait(.1) do
-        if temptable.collecting.collecthoneytoken then
+        if bongkoc.toggles.autofarm and not temptable.planting and not temptable.started.vicious and not temptable.started.windy and not temptable.started.ant and not bongkoc.toggles.traincrab and temptable.collecting.collecthoneytoken then
             game:GetService("ReplicatedStorage").Events.ToyEvent:FireServer("Honey Wreath")
             platformm = game.Workspace.Toys["Honey Wreath"]
                             .Platform
