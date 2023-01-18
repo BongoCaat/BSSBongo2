@@ -4022,7 +4022,7 @@ task.spawn(function()
                     fieldselected.Position.Z
                 )
                 fieldposition = fieldselected.Position
-                if temptable.sprouts.detected and temptable.sprouts.coords and bongkoc.toggles.farmsprouts and not temptable.planting and not temptable.started.windy and not temptable.started.vicious and not temptable.detected.windy and not temptable.detected.vicious then
+                if temptable.sprouts.detected and temptable.sprouts.coords and bongkoc.toggles.farmsprouts and not temptable.planting and not temptable.started.windy and not temptable.started.vicious then
                     onlyonesprinkler = true
                     fieldposition = temptable.sprouts.coords.Position
                     fieldpos = temptable.sprouts.coords
@@ -4031,7 +4031,7 @@ task.spawn(function()
                     playeractivescommand:FireServer({["Name"] = "Micro-Converter"})
 		            pollenpercentage = 100
                 end]]
-                if bongkoc.toggles.farmpuffshrooms and game.Workspace.Happenings.Puffshrooms:FindFirstChildOfClass("Model") and not temptable.planting and not temptable.started.windy and not temptable.started.vicious and not temptable.detected.windy and not temptable.detected.vicious then
+                if bongkoc.toggles.farmpuffshrooms and game.Workspace.Happenings.Puffshrooms:FindFirstChildOfClass("Model") and not temptable.planting and not temptable.started.windy and not temptable.started.vicious then
                     local mythics = {}
                     local legendaries = {}
                     local epics = {}
@@ -4137,7 +4137,7 @@ task.spawn(function()
                     end]]
                 end
                 
-                if bongkoc.toggles.convertballoons and not temptable.planting and not temptable.started.vicious and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious and bongkoc.vars.convertballoonpercent and gethiveballoon() and getBuffTime("8083443467") < tonumber(bongkoc.vars.convertballoonpercent) / 100 then
+                if bongkoc.toggles.convertballoons and not temptable.planting and not temptable.started.vicious and not temptable.started.windy and bongkoc.vars.convertballoonpercent and gethiveballoon() and getBuffTime("8083443467") < tonumber(bongkoc.vars.convertballoonpercent) / 100 then
                     temptable.tokensfarm = false
                     api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
                     task.wait(2)
@@ -4161,7 +4161,7 @@ task.spawn(function()
                     if bongkoc.toggles.autoquest then
                         makequests()
                     end
-                    if bongkoc.toggles.autokillmobs and not temptable.started.vicious and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious and not temptable.planting then
+                    if bongkoc.toggles.autokillmobs and not temptable.started.vicious and not temptable.started.windy and not temptable.planting then
                         if tick() - temptable.lastmobkill >= bongkoc.vars.monstertimer * 60 then
                             temptable.lastmobkill = tick()
                             temptable.started.monsters = true
@@ -4202,10 +4202,10 @@ task.spawn(function()
                             playeractivescommand:FireServer({["Name"] = "Sprinkler Builder"})
                         end
                     else
-                        if not game.Workspace.MonsterSpawners.CoconutCrab.Attachment.TimerGui.TimerLabel.Visible and not temptable.started.vicious and not temptable.started.monsters and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious and findField(fieldposition).Name == "Coconut Field" then
+                        if not game.Workspace.MonsterSpawners.CoconutCrab.Attachment.TimerGui.TimerLabel.Visible and not temptable.started.vicious and not temptable.started.monsters and not temptable.started.windy and findField(fieldposition).Name == "Coconut Field" then
                             maskequip("Demon Mask")
                             temptable.started.crab = true
-                            while not game.Workspace.MonsterSpawners.CoconutCrab.Attachment.TimerGui.TimerLabel.Visible and not temptable.started.vicious and not temptable.started.monsters and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious and findField(fieldposition).Name == "Coconut Field" do
+                            while not game.Workspace.MonsterSpawners.CoconutCrab.Attachment.TimerGui.TimerLabel.Visible and not temptable.started.vicious and not temptable.started.monsters and not temptable.started.windy and findField(fieldposition).Name == "Coconut Field" do
                                 task.wait()
                                 if api.humanoidrootpart() then
                                     api.humanoidrootpart().CFrame = CFrame.new(-307.52117919922, 110.11863250732, 467.86791992188)
@@ -4295,7 +4295,7 @@ task.spawn(function()
                         end
                     end
 
-                elseif tonumber(temptable.pollenpercentage) >= tonumber(bongkoc.vars.convertat) and not bongkoc.toggles.convertion --[[and not bongkoc.toggles.disableconversion]] and not temptable.started.vicious and not temptable.started.windy and not temptable.planting and not temptable.detected.windy and not temptable.detected.vicious then
+                elseif tonumber(temptable.pollenpercentage) >= tonumber(bongkoc.vars.convertat) and not bongkoc.toggles.convertion --[[and not bongkoc.toggles.disableconversion]] and not temptable.started.vicious and not temptable.started.windy and not temptable.planting then
                     if not bongkoc.toggles.disableconversion then
                         temptable.tokensfarm = false
                         api.tween(2, player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 3))
@@ -4324,7 +4324,7 @@ task.spawn(function()
                         if bongkoc.toggles.autohoneywreath then
                             wait(2)
                         end
-                        if bongkoc.toggles.autokillmobs and not temptable.started.vicious and not temptable.started.windy and not temptable.detected.windy and not temptable.detected.vicious then
+                        if bongkoc.toggles.autokillmobs and not temptable.started.vicious and not temptable.started.windy then
                             if tick() - temptable.lastmobkill >= bongkoc.vars.monstertimer * 60 then
                                 temptable.lastmobkill = tick()
                                 temptable.started.monsters = true
@@ -4750,8 +4750,8 @@ task.spawn(function()
                     if v.Transparency == 0 then
                         decal = v:FindFirstChildOfClass("Decal")
                         if decal.Texture == "1674871631" or decal.Texture == "rbxassetid://1674871631" then
-                            api.tween(0.3, v.CFrame)
-                            --api.humanoidrootpart().CFrame = v.CFrame
+                            --api.tween(0.3, v.CFrame)
+                            api.humanoidrootpart().CFrame = v.CFrame
                             break
                         end
                     end
