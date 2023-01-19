@@ -1661,7 +1661,7 @@ function getcoco(v)
     temptable.coconut = true
     api.tween(0.1, v.CFrame)
     repeat task.wait() api.walkTo(v.Position) until not v.Parent
-    task.wait(0.06)
+    task.wait(0.025)
     --[[repeat
         task.wait()
         if setfflag then
@@ -2577,7 +2577,7 @@ information:CreateLabel("📜 - May be exploit specific")
 information:CreateLabel(Beesmas.." - Function for Beesmas")
 information:CreateLabel("Modified by BongoCaat#5645")
 local gainedhoneylabel = information:CreateLabel("Gained Honey: 0")
-local windyfavor = information:CreateLabel("Windy Favor: 0")
+--local windyfavor = information:CreateLabel("Windy Favor: 0")
 local uptimelabel = information:CreateLabel("Uptime: 0")
 --[[information:CreateButton("Discord", function()
     setclipboard("BongoCaat#5645")
@@ -4845,7 +4845,7 @@ game.Workspace.Particles.Folder2.ChildAdded:Connect(function(child)
 end)
 game.Workspace.Particles.Folder2.ChildRemoved:Connect(function(child)
     if child.Name == "Sprout" then
-        task.wait(30)
+        task.wait(15)
         temptable.sprouts.detected = false
         temptable.sprouts.coords = ""
     end
@@ -4870,7 +4870,7 @@ game.Workspace.NPCBees.ChildAdded:Connect(function(v)
 end)
 game.Workspace.NPCBees.ChildRemoved:Connect(function(v)
     if v.Name == "Windy" then
-        task.wait(3)
+        task.wait(1.45)
         temptable.windy = nil
         temptable.detected.windy = false
     end
@@ -5066,7 +5066,7 @@ task.spawn(function()
         end
         local gained = temptable.honeycurrent - temptable.honeystart
         gainedhoneylabel:UpdateText("Gained Honey: " .. api.suffixstring(gained))
-        windyfavor:UpdateText("Windy Favor: "..rtsg()["WindShrine"]["WindyFavor"])
+        --windyfavor:UpdateText("Windy Favor: "..rtsg()["WindShrine"]["WindyFavor"])
         uptimelabel:UpdateText("Uptime: " .. truncatetime(math.round(tick() - temptable.starttime)))
     end
 end)
