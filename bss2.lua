@@ -3917,7 +3917,7 @@ task.spawn(function()
                             local pollentypes = {
                                 "White Pollen", "Red Pollen", "Blue Pollen", "Blue Flowers", "Red Flowers", "White Flowers"
                             }
-                            if (bongkoc.toggles.buckobeequests and questName:find("Bucko Bee")) or (bongkoc.toggles.rileybeequests and questName:find("Riley Bee")) or (bongkoc.toggles.polarbearquests and questName:find("Polar Bear")) or (bongkoc.toggles.brownbearquests and questName:find("Brown Bear")) or (bongkoc.toggles.blackbearquests and questName:find("Black Bear")) or (bongkoc.toggles.allquests and not questName:find("Bear:") and not questName:find("Bee:")) then
+                            if (bongkoc.toggles.buckobeequests and questName:find("Bucko Bee")) or (bongkoc.toggles.rileybeequests and questName:find("Riley Bee")) or (bongkoc.toggles.polarbearquests and questName:find("Polar Bear")) or (bongkoc.toggles.brownbearquests and questName:find("Brown Bear")) or (bongkoc.toggles.blackbearquests and questName:find("Black Bear")) or (bongkoc.toggles.allquests and not questName:find("Bear:") and not questName:find("Dapper Bear:") and not questName:find("Dapper Quest") and not questName:find("Bee:")) then
                                 if not string.find(v.Text, "Puffshroom") then
                                     if text:find(" Goo ") then
                                         temptable.usegumdropsforquest = true
@@ -5061,7 +5061,7 @@ task.spawn(function()
             getQuest:FireServer("Bucko Bee")
             getQuest:FireServer("Riley Bee")
             if bongkoc.toggles.autoquesthoneybee then
-                completeQuest:FireServer("Honey Bee")
+                getQuest:FireServer("Honey Bee")
             end
         end
         local gained = temptable.honeycurrent - temptable.honeystart
